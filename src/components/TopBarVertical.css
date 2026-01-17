@@ -1,0 +1,77 @@
+/* ВЕРТИКАЛЬНЫЙ ТОПБАР */
+.topbar-vertical {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 180px;
+  min-height: 100vh;
+
+  background: #fff;
+  padding: 20px 16px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  box-shadow: 0 0 12px rgba(0,0,0,0.06);
+  z-index: 1000;
+}
+
+/* ЛОГОТИП */
+.logo-wrap-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 20px; /* ← отступ вниз, чтобы навигация была ниже */
+}
+
+.logo-img-vertical {
+  width: 60px;
+  height: auto;
+}
+
+.service-title-vertical {
+  font-size: 14px;
+  text-align: center;
+  color: #000;
+}
+
+/* НАВИГАЦИЯ — ПОД ЛОГОТИПОМ, ПО ЦЕНТРУ */
+.topbar-nav-vertical {
+  width: 100%;
+  display: flex;
+  justify-content: center; /* ← центрируем по горизонтали */
+}
+
+.topbar-nav-vertical ul {
+  display: flex;
+  flex-direction: column; /* ← строго столбик */
+  align-items: center;     /* ← центрируем текст */
+  gap: 14px;
+
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.topbar-nav-vertical li {
+  width: 100%;
+  text-align: center;
+}
+
+.topbar-nav-vertical a {
+  display: block;
+  width: 100%;
+
+  font-size: 16px;
+  color: #333;
+  text-decoration: none;
+
+  padding: 6px 0;
+}
+
+/* СДВИГ КОНТЕНТА ВПРАВО */
+.details-root {
+  margin-left: 200px;
+}

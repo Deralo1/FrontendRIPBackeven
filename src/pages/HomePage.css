@@ -1,0 +1,53 @@
+:root {
+  --bg: #f4f7fc;
+  --accent: #f15922;
+  --muted: #405965;
+  --card-shadow: 0 0 20px 3px rgba(88, 88, 88, 0.06);
+}
+
+body {
+  margin: 0;
+  font-family: "Open Sans", Arial, sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+}
+.home-content {
+  padding: 36px 0;
+  margin-top: 12px; /* расстояние между топбаром и текстом */
+}
+
+
+.home-root {
+  max-width: 1770px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.home-title {
+  font-size: 36px;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.home-text {
+  font-size: 18px;
+  color: #405965;
+  line-height: 1.6;
+  max-width: 900px;
+  margin-bottom: 28px;
+}
+
+.home-button {
+  background: var(--accent);
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 18px;
+  display: inline-block;
+  transition: background 0.2s ease;
+}
+
+.home-button:hover {
+  background: #d94d1f;
+}
