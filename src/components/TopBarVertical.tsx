@@ -1,4 +1,5 @@
 import NavigationVertical from "./NavigationVertical";
+import MobileMenuVertical from "./MobileMenuVertical";
 import "./TopBarVertical.css";
 
 export const TopBarVertical = () => {
@@ -18,6 +19,8 @@ export const TopBarVertical = () => {
       <nav className="topbar-nav-vertical">
         <NavigationVertical />
       </nav>
+
+      <MobileMenuVertical />
     </header>
   );
 };

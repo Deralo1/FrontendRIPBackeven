@@ -4,38 +4,54 @@
   --muted: #405965;
   --card-shadow: 0 0 20px 3px rgba(88, 88, 88, 0.06);
 }
+
 * {
   box-sizing: border-box;
 }
+
+html,
+body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
   font-family: "Open Sans", Arial, sans-serif;
   background: var(--bg);
   min-height: 100vh;
 }
+
 .page-root {
+  width: 100%;
   max-width: 1770px;
   margin: 0 auto;
   padding: 24px;
+  box-sizing: border-box;
 }
+
+/* ===== TOPBAR STYLES ===== */
 .topbar {
   background: #fff;
   border-radius: 4px;
   display: flex;
-  flex-direction: row;      /* гарантируем одну линию */
-  align-items: center;      /* вертикальное выравнивание */
+  flex-direction: row;
+  align-items: center;
   justify-content: space-between;
   padding: 16px 24px;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
-  white-space: nowrap;      /* запрещаем перенос строк */
-  gap: 24px;                /* расстояние между блоками */
+  gap: 24px;
+  flex-wrap: nowrap;
+  position: relative;
 }
 
 .logo-wrap {
   display: flex;
-  flex-direction: row;      /* логотип + текст в линию */
+  flex-direction: row;
   align-items: center;
   gap: 16px;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .logo-img {
@@ -48,24 +64,37 @@ body {
   flex-direction: row;
   align-items: center;
   gap: 20px;
+  flex-shrink: 0;
 }
 
 .nav-link {
   font-size: 18px;
   color: #333;
   text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.nav-link:hover {
+  color: var(--accent);
 }
 
 .service-title {
   font-family: "Instrument Serif", serif;
   font-size: 18px;
   color: #000;
+  white-space: nowrap;
 }
+
+/* ===== SEARCH FORM STYLES ===== */
 .search-form {
   display: flex;
   align-items: center;
   flex: 1;
+  min-width: 250px;
 }
+
 .search-input {
   flex: 1;
   height: 52px;
@@ -74,10 +103,12 @@ body {
   border: 1px solid #e6eef8;
   background: #fff;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.12);
+  color: #405965;
+  font-size: 14px;
 }
-.search-input,
-.price-input {
-  color: #405965; /* тот же muted */
+
+.search-input::placeholder {
+  color: #a0a0a0;
 }
 
 .search-button {
@@ -89,22 +120,72 @@ body {
   height: 52px;
   border-radius: 2px;
   cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s ease;
 }
+
+.search-button:hover {
+  background: #d64811;
+}
+
+/* ===== CONTENT LAYOUT ===== */
 .content {
   padding: 36px 0;
 }
+
 .cards-area {
   max-width: 1770px;
   margin: 0 auto;
 }
+
 .search-row {
   margin: 18px 0 28px;
 }
+
+/* ===== FILTERS STYLES ===== */
+.filters-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.price-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.price-input {
+  width: 140px;
+  padding: 8px 10px;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #fff;
+  color: #405965;
+  transition: border-color 0.15s ease;
+}
+
+.price-input:focus {
+  border-color: #0969da;
+  outline: none;
+}
+
+.price-separator {
+  font-size: 16px;
+  color: #6e7781;
+}
+
+/* ===== CARDS GRID - RESPONSIVE ===== */
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 28px;
+  margin-top: 28px;
 }
+
 .card {
   background: #fff;
   border-radius: 25px;
@@ -112,44 +193,61 @@ body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  transition: box-shadow 0.3s ease;
 }
+
+.card:hover {
+  box-shadow: 0 0 24px 5px rgba(88, 88, 88, 0.12);
+}
+
 .card-img {
   height: 286px;
   background-size: cover;
   background-position: center;
   border-bottom: 1px solid #7a7a7a;
 }
+
 .card-body {
   padding: 18px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
+
 .card-title {
   margin: 6px 0 8px;
   color: var(--muted);
   font-size: 22px;
-}
-.card-price {
-  margin: 0 0 12px;
-  color: var(--muted);
-  font-size: 16px;
+  font-weight: 600;
 }
 
 .card-sub {
   margin: 0 0 12px;
   color: var(--muted);
   font-size: 16px;
+  flex-grow: 1;
 }
+
+.card-price {
+  margin: 12px 0;
+  color: var(--muted);
+  font-size: 16px;
+  font-weight: 600;
+}
+
 .card-controls {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Добавить слева, Подробнее справа */
+  justify-content: center;
   gap: 12px;
-  margin-top: 8px;
+  margin-top: auto;
 }
 
 .inline-form {
-  display: inline-block; /* чтобы форма вела себя как кнопка */
+  display: inline-block;
 }
 
+/* ===== BUTTONS STYLES ===== */
 .btn-details,
 .btn-add {
   background: #fff;
@@ -158,29 +256,31 @@ body {
   padding: 16px 30px;
   border-radius: 6px;
   cursor: pointer;
-  text-decoration: none;  /* для <a> */
-  display: inline-flex;   /* одинаковая высота и выравнивание */
+  text-decoration: none;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  flex: 1;
+  min-width: 120px;
 }
 
-/* Убираем дефолтные стили кнопки */
 .btn-add {
-  font-size: 16px;
   appearance: none;
   -webkit-appearance: none;
-  border: 1px solid #3c4256; /* совпадает с .btn-details */
-  background: #fff;
-  color: var(--muted);
 }
 
-/* Ховер-эффект одинаковый */
 .btn-details:hover,
 .btn-add:hover {
   background: #f7f9fc;
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
+/* ===== CALCULATOR BUTTON ===== */
 .calculator {
   position: fixed;
   right: 28px;
@@ -188,21 +288,28 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 80px;              /* размер круга */
+  width: 80px;
   height: 80px;
-  background: #fff;         /* белый фон */
-  border-radius: 50%;       /* круг */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* лёгкая тень */
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   cursor: pointer;
-}
-.calculator.disabled {
-  pointer-events: none;     /* отключает клики */
-  cursor: default;          /* обычный курсор */            /* визуально показывает, что элемент неактивен */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.calculator:hover:not(.disabled) {
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.calculator.disabled {
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.6;
+}
 
 .calculator img {
-  width: 70px;              /* уменьшаем иконку, чтобы она вписалась в круг */
+  width: 70px;
   height: 70px;
 }
 
@@ -215,35 +322,16 @@ body {
   border-radius: 50%;
   padding: 4px 7px;
   font-size: 12px;
+  font-weight: 600;
 }
+
 .page-footer {
   padding: 24px 0;
   color: #677786;
   text-align: left;
 }
 
-@media (max-width: 1100px) {
-  .cards-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-@media (max-width: 700px) {
-  .cards-grid {
-    grid-template-columns: 1fr;
-  }
-  .topbar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .search-form {
-    width: 100%;
-    margin-left: 0;
-    margin-top: 12px;
-  }
-}
-
 header img {
-  /*задаем размер картинки*/
   width: 50px;
   height: 50px;
   cursor: pointer;
@@ -264,36 +352,285 @@ h2 {
   font-size: 18px;
   margin-top: 20px;
 }
-.filters-row {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 10px;
-}
 
-.price-filter {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.price-input {
-  width: 140px;
-  padding: 8px 10px;
-  border: 1px solid #d0d7de;
-  border-radius: 6px;
-  font-size: 14px;
-  background: #fff;
-  transition: border-color 0.15s ease;
-}
-
-.price-input:focus {
-  border-color: #0969da;
-  outline: none;
-}
-
-.price-separator {
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px 20px;
+  color: #677786;
   font-size: 16px;
-  color: #6e7781;
+}
+
+/* ===== RESPONSIVE MEDIA QUERIES ===== */
+
+/* Desktop: 3 cards in a row */
+@media (min-width: 1201px) {
+  .cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .topbar {
+    flex-wrap: nowrap;
+  }
+}
+
+/* Tablet: 2 cards in a row */
+@media (max-width: 1200px) and (min-width: 769px) {
+  .page-root {
+    padding: 20px;
+  }
+  
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  
+  .topbar {
+    flex-wrap: nowrap;
+    padding: 12px 16px;
+    gap: 16px;
+  }
+  
+  .logo-wrap {
+    flex-shrink: 0;
+  }
+  
+  .logo-img {
+    width: 70px;
+  }
+  
+  .service-title {
+    font-size: 13px;
+  }
+  
+  .topbar-nav {
+    flex-shrink: 0;
+  }
+  
+  .search-form {
+    min-width: 200px;
+    flex: 1;
+  }
+  
+  .filters-row {
+    display: none;
+  }
+  
+  .card-img {
+    height: 240px;
+  }
+  
+  .card-title {
+    font-size: 20px;
+  }
+  
+  .btn-details,
+  .btn-add {
+    padding: 14px 24px;
+    font-size: 15px;
+  }
+}
+
+/* Mobile: 1 card in a row */
+@media (max-width: 768px) {
+  .page-root {
+    padding: 16px;
+  }
+  
+  .cards-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  /* Topbar reorganization */
+  .topbar {
+    flex-direction: row;
+    align-items: center;
+    padding: 12px 16px;
+    gap: 12px;
+    flex-wrap: nowrap;
+  }
+  
+  /* Hide desktop navigation on mobile */
+  .topbar-nav {
+    display: none;
+  }
+  
+  .logo-wrap {
+    flex: 1;
+    justify-content: flex-start;
+  }
+  
+  .logo-img {
+    width: 70px;
+  }
+  
+  .service-title {
+    font-size: 12px;
+    line-height: 1.2;
+  }
+  
+  .nav-link {
+    font-size: 16px;
+  }
+  
+  /* Search form on mobile */
+  .search-form {
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  
+  .search-input {
+    width: 100%;
+    height: 48px;
+    font-size: 16px;
+  }
+  
+  .search-button {
+    width: 100%;
+    margin-left: 0;
+    height: 48px;
+    font-size: 16px;
+  }
+  
+  /* Filters on mobile */
+  .filters-row {
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .price-filter {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+  
+  .price-input {
+    width: 100%;
+    padding: 12px;
+  }
+  
+  .price-separator {
+    text-align: center;
+    padding: 8px 0;
+  }
+  
+  /* Cards on mobile */
+  .card-img {
+    height: 220px;
+  }
+  
+  .card-body {
+    padding: 16px;
+  }
+  
+  .card-title {
+    font-size: 18px;
+    margin: 4px 0 6px;
+  }
+  
+  .card-sub {
+    font-size: 14px;
+    margin: 0 0 10px;
+  }
+  
+  .card-price {
+    font-size: 15px;
+    margin: 10px 0;
+  }
+  
+  .card-controls {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .btn-details,
+  .btn-add {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+  
+  /* Calculator on mobile */
+  .calculator {
+    width: 70px;
+    height: 70px;
+    right: 16px;
+    bottom: 16px;
+  }
+  
+  .calculator img {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .calc-badge {
+    font-size: 11px;
+    padding: 3px 5px;
+  }
+}
+
+/* Small mobile: very compact */
+@media (max-width: 480px) {
+  .page-root {
+    padding: 12px;
+  }
+  
+  .topbar {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+  
+  .logo-img {
+    width: 70px;
+  }
+  
+  .nav-link {
+    font-size: 14px;
+  }
+  
+  .service-title {
+    font-size: 14px;
+  }
+  
+  .search-input,
+  .search-button {
+    height: 44px;
+    font-size: 14px;
+  }
+  
+  .price-input {
+    font-size: 13px;
+    padding: 10px;
+  }
+  
+  .cards-grid {
+    gap: 16px;
+  }
+  
+  .card-img {
+    height: 180px;
+  }
+  
+  .card-title {
+    font-size: 16px;
+  }
+  
+  .card-sub {
+    font-size: 13px;
+  }
+  
+  .card-price {
+    font-size: 14px;
+  }
+  
+  .btn-details,
+  .btn-add {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
 }
 

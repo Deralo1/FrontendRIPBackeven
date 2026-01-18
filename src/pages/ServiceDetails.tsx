@@ -5,6 +5,8 @@ import "./ServiceDetails.css";
 import { BreadCrumbs } from "../components/BreadCrumbs";
 import { ROUTES } from "../../Routes";
 import { expensesMock } from "../modules/expensesMock";
+import DefaultImage from "../assets/DefaultImage.png";
+import DefaultVideo from "../assets/DefaultVideo.mp4";
 
 export const ServiceDetails: FC = () => {
   const { id } = useParams();
@@ -40,11 +42,12 @@ export const ServiceDetails: FC = () => {
         ]}
       />
       <main className="details-layout">
-        {/* Центр — видео */}
+        {/* Слева — видео */}
         <div className="details-video-wrap">
           <video
             className="details-video"
-            src="/src/assets/DefaultVideo.mp4"
+            src={DefaultVideo}
+            controls
             autoPlay
             muted
             loop
@@ -52,15 +55,26 @@ export const ServiceDetails: FC = () => {
           />
         </div>
 
-        {/* Справа — текст */}
-        <div className="details-info">
-          <h1 className="details-title">{service.Title}</h1>
+        {/* Справа — картинка и текст */}
+        <div className="details-right">
+          {/* Картинка для больших/средних экранов */}
+          <div className="details-image-wrap">
+            <img
+              src={service.ImageURL || DefaultImage}
+              alt={service.Title}
+              className="details-image"
+            />
+          </div>
 
-          <p className="details-price">Цена: {service.Price} ₽</p>
+          <div className="details-info">
+            <h1 className="details-title">{service.Title}</h1>
 
-          <p className="details-short">{service.ShortDescription}</p>
+            <p className="details-price">Цена: {service.Price} ₽</p>
 
-          <p className="details-desc">{service.Description}</p>
+            <p className="details-short">{service.ShortDescription}</p>
+
+            <p className="details-desc">{service.Description}</p>
+          </div>
         </div>
       </main>
     </div>

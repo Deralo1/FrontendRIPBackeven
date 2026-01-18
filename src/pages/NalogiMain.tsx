@@ -8,7 +8,16 @@ import { useSearchParams } from "react-router-dom";
 import { TopBar } from "../components/TopBar";
 import { expensesMock } from "../modules/expensesMock";
 import { Link } from "react-router-dom";
+import {
+  useSearch,
+  useMinPrice,
+  useMaxPrice,
+  setSearchAction,
+  setMinPriceAction,
+  setMaxPriceAction,
+} from "../slices/filtersSlice";
 
+import { useDispatch } from "react-redux";
 // Тип услуги
 interface Service {
   ExpenseID: number;
@@ -24,8 +33,12 @@ const NalogiMain: FC = () => {
 
   const [searchParams] = useSearchParams();
   const query = searchParams.get("BreakenevSearch") || "";
-  const [minPrice, setMinPrice] = useState<number | "">("");
-  const [maxPrice, setMaxPrice] = useState<number | "">("");
+
+  const dispatch = useDispatch();
+
+  const search = useSearch();
+  const minPrice = useMinPrice();
+  const maxPrice = useMaxPrice();
 
   useEffect(() => {
     const loadExpenses = async () => {
@@ -45,11 +58,16 @@ const NalogiMain: FC = () => {
 
         const data = await res.json();
 
-        const filtered = data.data.filter((s: Service) => {
-          const okMin = minPrice === "" || s.Price >= minPrice;
-          const okMax = maxPrice === "" || s.Price <= maxPrice;
-          return okMin && okMax;
-        });
+const filtered = data.data.filter((s: Service) => {
+  const min = minPrice === "" ? null : Number(minPrice);
+  const max = maxPrice === "" ? null : Number(maxPrice);
+
+  const okMin = min === null || s.Price >= min;
+  const okMax = max === null || s.Price <= max;
+
+  return okMin && okMax;
+});
+
 
         setServices(filtered);
       } catch (err) {
@@ -58,16 +76,21 @@ const NalogiMain: FC = () => {
         const normalizedQuery = query.trim().toLowerCase();
 
         const filtered = expensesMock
-          .filter((s: Service) =>
-            normalizedQuery
-              ? s.Title.toLowerCase().includes(normalizedQuery)
-              : true,
-          )
-          .filter((s: Service) => {
-            const okMin = minPrice === "" || s.Price >= minPrice;
-            const okMax = maxPrice === "" || s.Price <= maxPrice;
-            return okMin && okMax;
-          });
+  .filter((s: Service) =>
+    normalizedQuery
+      ? s.Title.toLowerCase().includes(normalizedQuery)
+      : true
+  )
+  .filter((s: Service) => {
+    const min = minPrice === "" ? null : Number(minPrice);
+    const max = maxPrice === "" ? null : Number(maxPrice);
+
+    const okMin = min === null || s.Price >= min;
+    const okMax = max === null || s.Price <= max;
+
+    return okMin && okMax;
+  });
+
 
         setServices(filtered);
       } finally {
@@ -84,14 +107,15 @@ const NalogiMain: FC = () => {
       <main className="content">
         <div className="cards-area">
           <div className="search-row">
-            <form className="search-form" action="/Nalogimain" method="GET">
+            <form className="search-form" >
               <input
                 className="search-input"
                 type="text"
-                name="BreakenevSearch"
                 placeholder="Поиск"
-                defaultValue={query}
+                value={search}
+                onChange={(e) => dispatch(setSearchAction(e.target.value))}
               />
+
               <button className="search-button" type="submit">
                 Найти
               </button>
@@ -101,12 +125,15 @@ const NalogiMain: FC = () => {
             <div className="price-filter">
               <input
                 type="number"
+                min="0"
                 className="price-input"
                 placeholder="Мин. цена"
                 value={minPrice}
                 onChange={(e) =>
-                  setMinPrice(
-                    e.target.value === "" ? "" : Number(e.target.value),
+                  dispatch(
+                    setMinPriceAction(
+                      e.target.value === "" ? "" : Number(e.target.value),
+                    ),
                   )
                 }
               />
@@ -115,12 +142,15 @@ const NalogiMain: FC = () => {
 
               <input
                 type="number"
+                min="0"
                 className="price-input"
                 placeholder="Макс. цена"
                 value={maxPrice}
                 onChange={(e) =>
-                  setMaxPrice(
-                    e.target.value === "" ? "" : Number(e.target.value),
+                  dispatch(
+                    setMaxPriceAction(
+                      e.target.value === "" ? "" : Number(e.target.value),
+                    ),
                   )
                 }
               />
@@ -171,14 +201,12 @@ const NalogiMain: FC = () => {
                           />
                         </form>
 
-
-<Link
-  className="btn-details"
-  to={`/Nalogimain/${s.ExpenseID}`}
->
-  Подробнее
-</Link>
-
+                        <Link
+                          className="btn-details"
+                          to={`/Nalogimain/${s.ExpenseID}`}
+                        >
+                          Подробнее
+                        </Link>
                       </div>
                     </div>
                   </div>

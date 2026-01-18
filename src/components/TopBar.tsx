@@ -1,6 +1,7 @@
 import defaultLogo from "../assets/fns.svg.png";
 import { Link } from "react-router-dom";
 import Navigation from "./Navigation";
+import MobileMenu from "./MobileMenu";
 
 export const TopBar = () => {
   return (
@@ -25,6 +26,7 @@ export const TopBar = () => {
       </div>
 
       <Navigation />
+      <MobileMenu />
     </header>
   );
 };

@@ -13,7 +13,7 @@
   flex-direction: column;
   align-items: center;
 
-  box-shadow: 0 0 12px rgba(0,0,0,0.06);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.06);
   z-index: 1000;
 }
 
@@ -23,7 +23,7 @@
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  margin-bottom: 20px; /* ← отступ вниз, чтобы навигация была ниже */
+  margin-bottom: 20px;
 }
 
 .logo-img-vertical {
@@ -37,17 +37,17 @@
   color: #000;
 }
 
-/* НАВИГАЦИЯ — ПОД ЛОГОТИПОМ, ПО ЦЕНТРУ */
+/* НАВИГАЦИЯ */
 .topbar-nav-vertical {
   width: 100%;
   display: flex;
-  justify-content: center; /* ← центрируем по горизонтали */
+  justify-content: center;
 }
 
 .topbar-nav-vertical ul {
   display: flex;
-  flex-direction: column; /* ← строго столбик */
-  align-items: center;     /* ← центрируем текст */
+  flex-direction: column;
+  align-items: center;
   gap: 14px;
 
   padding: 0;
@@ -69,9 +69,68 @@
   text-decoration: none;
 
   padding: 6px 0;
+  transition: color 0.2s ease;
+}
+
+.topbar-nav-vertical a:hover {
+  color: #f15922;
 }
 
 /* СДВИГ КОНТЕНТА ВПРАВО */
 .details-root {
   margin-left: 200px;
+}
+
+/* ===== МОБИЛЬНЫЙ АДАПТИВ ===== */
+
+@media (max-width: 768px) {
+  /* Вертикальный топбар переходит вниз на мобилке */
+  .topbar-vertical {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    width: 100%;
+    min-height: auto;
+    height: 70px;
+
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+
+    border-top: 1px solid #e6eef8;
+    border-radius: 0;
+    z-index: 1000;
+  }
+
+  .logo-wrap-vertical {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0;
+    flex: 1;
+  }
+
+  .logo-img-vertical {
+    width: 40px;
+  }
+
+  .service-title-vertical {
+    font-size: 11px;
+    line-height: 1.2;
+  }
+
+  /* Скрываем обычную навигацию */
+  .topbar-nav-vertical {
+    display: none;
+  }
+
+  /* Сдвиг контента вниз на мобилке */
+  .details-root {
+    margin-left: 0;
+    margin-bottom: 80px;
+  }
 }

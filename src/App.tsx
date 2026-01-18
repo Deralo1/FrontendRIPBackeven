@@ -6,7 +6,7 @@ import NalogiMain from "./pages/NalogiMain";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/FrontendRIPBackeven">
       <Routes>
         <Route path={ROUTES.HOME} index element={<HomePage />} />
         <Route path={ROUTES.EXPENSES} element={<NalogiMain />} />
