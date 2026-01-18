@@ -16,8 +16,9 @@ import {
   setMinPriceAction,
   setMaxPriceAction,
 } from "../slices/filtersSlice";
-
 import { useDispatch } from "react-redux";
+import emptyCartMock from "../assets/korzinaempty.png";
+
 // Тип услуги
 interface Service {
   ExpenseID: number;
@@ -99,7 +100,10 @@ const NalogiMain: FC = () => {
     loadExpenses();
   }, [query, minPrice, maxPrice]); // ← вот это убирает ошибку
 
-function toProxyUrl(url?: string) { if (!url) return ""; return url.replace("http://localhost:9000", "/img-proxy"); }
+  function toProxyUrl(url?: string) {
+    if (!url) return "";
+    return url.replace("http://localhost:9000", "/img-proxy");
+  }
 
   return (
     <div className="page-root">
@@ -223,6 +227,9 @@ function toProxyUrl(url?: string) { if (!url) return ""; return url.replace("htt
         <img
           src="/img-proxy/lab1/korzinaempty.png"
           alt="calculator-empty"
+          onError={(e) => {
+            e.currentTarget.src = emptyCartMock;
+          }}
         />
       </a>
     </div>

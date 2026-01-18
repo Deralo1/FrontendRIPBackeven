@@ -1,6 +1,7 @@
 import NavigationVertical from "./NavigationVertical";
 import MobileMenuVertical from "./MobileMenuVertical";
 import "./TopBarVertical.css";
+import defaultLogo from "../assets/fns.svg.png";
 
 export const TopBarVertical = () => {
   return (
@@ -10,9 +11,15 @@ export const TopBarVertical = () => {
           src="/img-proxy/lab1/fns.svg.png"
           alt="logo"
           className="logo-img-vertical"
+          onError={(e) => {
+            e.currentTarget.src = defaultLogo;
+          }}
         />
+
         <div className="service-title-vertical">
-          ФЕДЕРАЛЬНАЯ<br />НАЛОГОВАЯ СЛУЖБА
+          ФЕДЕРАЛЬНАЯ
+          <br />
+          НАЛОГОВАЯ СЛУЖБА
         </div>
       </div>
 
