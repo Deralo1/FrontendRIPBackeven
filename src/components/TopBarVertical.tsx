@@ -7,7 +7,7 @@ export const TopBarVertical = () => {
     <header className="topbar-vertical">
       <div className="logo-wrap-vertical">
         <img
-          src="http://localhost:9000/lab1/fns.svg.png"
+          src="/img-proxy/lab1/fns.svg.png"
           alt="logo"
           className="logo-img-vertical"
         />

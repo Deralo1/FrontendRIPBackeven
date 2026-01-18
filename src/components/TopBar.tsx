@@ -9,7 +9,7 @@ export const TopBar = () => {
       <div className="logo-wrap">
         <Link to="/Nalogimain">
           <img
-            src="http://localhost:9000/lab1/fns.svg.png"
+            src="/img-proxy/lab1/fns.svg.png"
             alt="logo"
             className="logo-img"
             onError={(e) => {

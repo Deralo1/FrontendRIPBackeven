@@ -58,16 +58,15 @@ const NalogiMain: FC = () => {
 
         const data = await res.json();
 
-const filtered = data.data.filter((s: Service) => {
-  const min = minPrice === "" ? null : Number(minPrice);
-  const max = maxPrice === "" ? null : Number(maxPrice);
+        const filtered = data.data.filter((s: Service) => {
+          const min = minPrice === "" ? null : Number(minPrice);
+          const max = maxPrice === "" ? null : Number(maxPrice);
 
-  const okMin = min === null || s.Price >= min;
-  const okMax = max === null || s.Price <= max;
+          const okMin = min === null || s.Price >= min;
+          const okMax = max === null || s.Price <= max;
 
-  return okMin && okMax;
-});
-
+          return okMin && okMax;
+        });
 
         setServices(filtered);
       } catch (err) {
@@ -76,21 +75,20 @@ const filtered = data.data.filter((s: Service) => {
         const normalizedQuery = query.trim().toLowerCase();
 
         const filtered = expensesMock
-  .filter((s: Service) =>
-    normalizedQuery
-      ? s.Title.toLowerCase().includes(normalizedQuery)
-      : true
-  )
-  .filter((s: Service) => {
-    const min = minPrice === "" ? null : Number(minPrice);
-    const max = maxPrice === "" ? null : Number(maxPrice);
+          .filter((s: Service) =>
+            normalizedQuery
+              ? s.Title.toLowerCase().includes(normalizedQuery)
+              : true,
+          )
+          .filter((s: Service) => {
+            const min = minPrice === "" ? null : Number(minPrice);
+            const max = maxPrice === "" ? null : Number(maxPrice);
 
-    const okMin = min === null || s.Price >= min;
-    const okMax = max === null || s.Price <= max;
+            const okMin = min === null || s.Price >= min;
+            const okMax = max === null || s.Price <= max;
 
-    return okMin && okMax;
-  });
-
+            return okMin && okMax;
+          });
 
         setServices(filtered);
       } finally {
@@ -101,13 +99,15 @@ const filtered = data.data.filter((s: Service) => {
     loadExpenses();
   }, [query, minPrice, maxPrice]); // ← вот это убирает ошибку
 
+function toProxyUrl(url?: string) { if (!url) return ""; return url.replace("http://localhost:9000", "/img-proxy"); }
+
   return (
     <div className="page-root">
       <TopBar />
       <main className="content">
         <div className="cards-area">
           <div className="search-row">
-            <form className="search-form" >
+            <form className="search-form">
               <input
                 className="search-input"
                 type="text"
@@ -173,7 +173,7 @@ const filtered = data.data.filter((s: Service) => {
                     <div
                       className="card-img"
                       style={{
-                        backgroundImage: `url('${s.ImageURL || DefaultImage}')`,
+                        backgroundImage: `url('${toProxyUrl(s.ImageURL) || DefaultImage}')`,
                       }}
                     ></div>
 
@@ -221,7 +221,7 @@ const filtered = data.data.filter((s: Service) => {
 
       <a className="calculator disabled">
         <img
-          src="http://localhost:9000/lab1/korzinaempty.png"
+          src="/img-proxy/lab1/korzinaempty.png"
           alt="calculator-empty"
         />
       </a>

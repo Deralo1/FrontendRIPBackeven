@@ -23,15 +23,14 @@ export const ServiceDetails: FC = () => {
         setService(data.data);
       } catch (err) {
         console.warn("Бэк недоступен — использую mock");
- setService(expensesMock.find(s => s.ExpenseID === Number(id)));
-
+        setService(expensesMock.find((s) => s.ExpenseID === Number(id)));
       }
     };
     loadDetails();
   }, [id]);
 
   if (!service) return null;
-
+function toProxyUrl(url?: string) { if (!url) return ""; return url.replace("http://localhost:9000", "/img-proxy"); }
   return (
     <div className="details-root">
       <TopBarVertical />
@@ -59,11 +58,15 @@ export const ServiceDetails: FC = () => {
         <div className="details-right">
           {/* Картинка для больших/средних экранов */}
           <div className="details-image-wrap">
+            {" "}
             <img
-              src={service.ImageURL || DefaultImage}
+              src={toProxyUrl(service.ImageURL) || DefaultImage}
               alt={service.Title}
               className="details-image"
-            />
+              onError={(e) => {
+                e.currentTarget.src = DefaultImage;
+              }}
+            />{" "}
           </div>
 
           <div className="details-info">
