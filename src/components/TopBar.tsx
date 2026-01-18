@@ -2,6 +2,7 @@ import defaultLogo from "../assets/fns.svg.png";
 import { Link } from "react-router-dom";
 import Navigation from "./Navigation";
 import MobileMenu from "./MobileMenu";
+import { dest_img } from "../target_config";
 
 export const TopBar = () => {
   return (
@@ -9,7 +10,7 @@ export const TopBar = () => {
       <div className="logo-wrap">
         <Link to="/Nalogimain">
           <img
-            src="/img-proxy/lab1/fns.svg.png"
+            src={dest_img + "/lab1/fns.svg.png"}
             alt="logo"
             className="logo-img"
             onError={(e) => {

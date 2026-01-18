@@ -1,8 +1,8 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
-import fs from "fs";
-import path from "path";
+import {api_proxy_addr, img_proxy_addr, dest_root} from "./src/target_config"
+
 
 export default defineConfig({
   plugins: [
@@ -31,25 +31,25 @@ export default defineConfig({
   ],
 
   // ВАЖНО: base должен заканчиваться слэшем
-  base: "/FrontendRIPBackeven/",
+  base: dest_root,
 
   server: {
-    https: {
-      key: fs.readFileSync(path.resolve(__dirname, "cert.key")),
-      cert: fs.readFileSync(path.resolve(__dirname, "cert.crt")),
-    },
+   // https: {
+    //  key: fs.readFileSync(path.resolve(__dirname, "cert.key")),
+     // cert: fs.readFileSync(path.resolve(__dirname, "cert.crt")),
+   // },
     host: true, // позволяет открывать сайт по локальному IP
     port: 3000,
     open: true,
 
     proxy: {
       "/api": {
-        target: "http://localhost:8082",
+        target: api_proxy_addr,
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, "/api/v1"),
       },
       "/img-proxy": {
-        target: "http://localhost:9000",
+        target: img_proxy_addr,
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/img-proxy/, ""),
       },

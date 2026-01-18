@@ -18,6 +18,8 @@ import {
 } from "../slices/filtersSlice";
 import { useDispatch } from "react-redux";
 import emptyCartMock from "../assets/korzinaempty.png";
+import { dest_img } from "../target_config";
+import { dest_api } from "../target_config";
 
 // Тип услуги
 interface Service {
@@ -26,6 +28,7 @@ interface Service {
   ShortDescription: string;
   Price: number;
   ImageURL: string;
+  isMock?: boolean;
 }
 
 const NalogiMain: FC = () => {
@@ -41,25 +44,47 @@ const NalogiMain: FC = () => {
   const minPrice = useMinPrice();
   const maxPrice = useMaxPrice();
 
-  useEffect(() => {
-    const loadExpenses = async () => {
-      setLoading(true);
+useEffect(() => {
+  const loadExpenses = async () => {
+    setLoading(true);
 
-      const url =
-        query.trim().length > 0
-          ? `/api/expenses?searchbyexpensename=${encodeURIComponent(query)}`
-          : `/api/expenses`;
+    const url =
+      query.trim().length > 0
+        ? `${dest_api}/api/v1/expenses?searchbyexpensename=${encodeURIComponent(query)}`
+        : `${dest_api}/api/v1/expenses`;
 
-      try {
-        const res = await fetch(url);
+    try {
+      const res = await fetch(url);
 
-        if (!res.ok) {
-          throw new Error("Backend unavailable");
-        }
+      if (!res.ok) {
+        throw new Error("Backend unavailable");
+      }
 
-        const data = await res.json();
+      const data = await res.json();
 
-        const filtered = data.data.filter((s: Service) => {
+      const filtered = data.data.filter((s: Service) => {
+        const min = minPrice === "" ? null : Number(minPrice);
+        const max = maxPrice === "" ? null : Number(maxPrice);
+
+        const okMin = min === null || s.Price >= min;
+        const okMax = max === null || s.Price <= max;
+
+        return okMin && okMax;
+      });
+
+      setServices(filtered);
+    } catch (err) {
+      console.warn("Бэк недоступен — использую mock");
+
+      const normalizedQuery = query.trim().toLowerCase();
+
+      const filtered = expensesMock
+        .filter((s: Service) =>
+          normalizedQuery
+            ? s.Title.toLowerCase().includes(normalizedQuery)
+            : true,
+        )
+        .filter((s: Service) => {
           const min = minPrice === "" ? null : Number(minPrice);
           const max = maxPrice === "" ? null : Number(maxPrice);
 
@@ -69,40 +94,24 @@ const NalogiMain: FC = () => {
           return okMin && okMax;
         });
 
-        setServices(filtered);
-      } catch (err) {
-        console.warn("Бэк недоступен — использую mock");
+      setServices(filtered);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        const normalizedQuery = query.trim().toLowerCase();
+  loadExpenses();
+}, [query, minPrice, maxPrice]);
 
-        const filtered = expensesMock
-          .filter((s: Service) =>
-            normalizedQuery
-              ? s.Title.toLowerCase().includes(normalizedQuery)
-              : true,
-          )
-          .filter((s: Service) => {
-            const min = minPrice === "" ? null : Number(minPrice);
-            const max = maxPrice === "" ? null : Number(maxPrice);
 
-            const okMin = min === null || s.Price >= min;
-            const okMax = max === null || s.Price <= max;
-
-            return okMin && okMax;
-          });
-
-        setServices(filtered);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadExpenses();
-  }, [query, minPrice, maxPrice]); // ← вот это убирает ошибку
-
-  function toProxyUrl(url?: string) {
+  function toProxyUrl(url?: string, isMock?: boolean) {
     if (!url) return "";
-    return url.replace("http://localhost:9000", "/img-proxy");
+    // Если это мок изображение, то это уже валидный путь (из assets)
+    if (isMock) {
+      return url;
+    }
+    // Иначе преобразуем URL с бэкенда
+    return dest_img + url.replace("http://192.168.31.164:9000", "").replace("http://localhost:9000", "");
   }
 
   return (
@@ -177,7 +186,7 @@ const NalogiMain: FC = () => {
                     <div
                       className="card-img"
                       style={{
-                        backgroundImage: `url('${toProxyUrl(s.ImageURL) || DefaultImage}')`,
+                        backgroundImage: `url('${toProxyUrl(s.ImageURL, s.isMock) || DefaultImage}')`,
                       }}
                     ></div>
 
@@ -225,7 +234,7 @@ const NalogiMain: FC = () => {
 
       <a className="calculator disabled">
         <img
-          src="/img-proxy/lab1/korzinaempty.png"
+          src={dest_img + "/lab1/korzinaempty.png"}
           alt="calculator-empty"
           onError={(e) => {
             e.currentTarget.src = emptyCartMock;

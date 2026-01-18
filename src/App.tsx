@@ -5,6 +5,7 @@ import { HomePage } from "./pages/HomePage";
 import NalogiMain from "./pages/NalogiMain";
 import { invoke } from "@tauri-apps/api/core";
 import { useEffect } from "react";
+import { dest_root } from "./target_config";
 
 function App() {
     useEffect(()=>{
@@ -19,7 +20,7 @@ function App() {
   }, [])
 
   return (
-    <BrowserRouter basename="/FrontendRIPBackeven">
+    <BrowserRouter basename={dest_root}>
       <Routes>
         <Route path={ROUTES.HOME} index element={<HomePage />} />
         <Route path={ROUTES.EXPENSES} element={<NalogiMain />} />

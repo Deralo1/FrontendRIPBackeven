@@ -6,16 +6,29 @@ import { BreadCrumbs } from "../components/BreadCrumbs";
 import { ROUTES } from "../../Routes";
 import { expensesMock } from "../modules/expensesMock";
 import DefaultImage from "../assets/DefaultImage.png";
-import DefaultVideo from "../assets/DefaultVideo.mp4";
+
+import { dest_img } from "../target_config";
+
+interface ServiceDetail {
+  ExpenseID: number;
+  Title: string;
+  ShortDescription: string;
+  Price: number;
+  ImageURL: string;
+  Description: string;
+  isMock?: boolean;
+}
+import { dest_api } from "../target_config";
 
 export const ServiceDetails: FC = () => {
   const { id } = useParams();
-  const [service, setService] = useState<any>(null);
+  const [service, setService] = useState<ServiceDetail | null>(null);
 
   useEffect(() => {
+    console.log("Render ServiceDetails");
     const loadDetails = async () => {
       try {
-        const res = await fetch(`/api/expenses/${id}`);
+const res = await fetch(`${dest_api}/api/v1/expenses/${id}`);
         if (!res.ok) {
           throw new Error("Backend unavailable");
         }
@@ -23,14 +36,31 @@ export const ServiceDetails: FC = () => {
         setService(data.data);
       } catch (err) {
         console.warn("Бэк недоступен — использую mock");
-        setService(expensesMock.find((s) => s.ExpenseID === Number(id)));
+        setService(
+          expensesMock.find((s) => s.ExpenseID === Number(id)) || null,
+        );
       }
     };
     loadDetails();
   }, [id]);
 
   if (!service) return null;
-function toProxyUrl(url?: string) { if (!url) return ""; return url.replace("http://localhost:9000", "/img-proxy"); }
+
+  function toProxyUrl(url?: string, isMock?: boolean) {
+    if (!url) return "";
+    // Если это мок изображение, то это уже валидный путь (из assets)
+    if (isMock) {
+      return url;
+    }
+    // Иначе преобразуем URL с бэкенда
+    return (
+      dest_img +
+      url
+        .replace("http://192.168.31.164:9000", "")
+        .replace("http://localhost:9000", "")
+    );
+  }
+
   return (
     <div className="details-root">
       <TopBarVertical />
@@ -43,15 +73,13 @@ function toProxyUrl(url?: string) { if (!url) return ""; return url.replace("htt
       <main className="details-layout">
         {/* Слева — видео */}
         <div className="details-video-wrap">
-          <video
-            className="details-video"
-            src={DefaultVideo}
-            controls
-            autoPlay
-            muted
-            loop
-            playsInline
-          />
+<img
+  className="details-video"
+  src="/DefaultVideo.gif"
+  alt="Animation"
+  draggable={false}
+/>
+
         </div>
 
         {/* Справа — картинка и текст */}
@@ -60,7 +88,7 @@ function toProxyUrl(url?: string) { if (!url) return ""; return url.replace("htt
           <div className="details-image-wrap">
             {" "}
             <img
-              src={toProxyUrl(service.ImageURL) || DefaultImage}
+              src={toProxyUrl(service.ImageURL, service.isMock) || DefaultImage}
               alt={service.Title}
               className="details-image"
               onError={(e) => {
