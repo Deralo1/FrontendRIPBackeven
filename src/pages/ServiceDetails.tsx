@@ -5,7 +5,7 @@ import "./ServiceDetails.css";
 import { BreadCrumbs } from "../components/BreadCrumbs";
 import { ROUTES } from "../../Routes";
 import { expensesMock } from "../modules/expensesMock";
-
+import defvideo from "/src/assets/DefaultVideo.mp4"
 export const ServiceDetails: FC = () => {
   const { id } = useParams();
   const [service, setService] = useState<any>(null);
@@ -44,7 +44,7 @@ export const ServiceDetails: FC = () => {
         <div className="details-video-wrap">
           <video
             className="details-video"
-            src="/src/assets/DefaultVideo.mp4"
+            src = { defvideo }
             autoPlay
             muted
             loop
