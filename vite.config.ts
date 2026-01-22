@@ -1,8 +1,9 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
-import {api_proxy_addr, img_proxy_addr, dest_root} from "./src/target_config"
-
+import { api_proxy_addr, img_proxy_addr, dest_root } from "./src/target_config";
+import fs from "fs";
+import path from "path";
 
 export default defineConfig({
   plugins: [
@@ -31,14 +32,17 @@ export default defineConfig({
   ],
 
   // ВАЖНО: base должен заканчиваться слэшем
-  base: dest_root,
+base: dest_root,
+
 
   server: {
-   // https: {
-    //  key: fs.readFileSync(path.resolve(__dirname, "cert.key")),
-     // cert: fs.readFileSync(path.resolve(__dirname, "cert.crt")),
-   // },
-    host: true, // позволяет открывать сайт по локальному IP
+    https: {
+      key: fs.readFileSync(
+        path.resolve(__dirname, "certs/10.205.157.61-key.pem"),
+      ),
+      cert: fs.readFileSync(path.resolve(__dirname, "certs/10.205.157.61.pem")),
+    },
+    host: "0.0.0.0", // обязательно, иначе ZeroTier не увидит сервер 
     port: 3000,
     open: true,
 

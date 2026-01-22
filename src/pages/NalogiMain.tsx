@@ -103,7 +103,6 @@ useEffect(() => {
   loadExpenses();
 }, [query, minPrice, maxPrice]);
 
-
   function toProxyUrl(url?: string, isMock?: boolean) {
     if (!url) return "";
     // Если это мок изображение, то это уже валидный путь (из assets)

@@ -3,14 +3,17 @@
   "productName": "Breakevencalc",
   "version": "0.1.0",
   "identifier": "com.deralo.breakevencalc",
+
   "build": {
     "frontendDist": "../dist",
-    "devUrl": "http://localhost:3000",
+    "devUrl": "https://10.205.157.61:3000",
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "npm run build"
   },
+
   "app": {
     "withGlobalTauri": true,
+
     "windows": [
       {
         "title": "Breakevencalc",
@@ -18,19 +21,32 @@
         "height": 600,
         "resizable": true,
         "fullscreen": false,
-        "devtools": true
+        "devtools": true,
+
+
+        "url": "index.html"
       }
     ],
-"security": {
-  "csp": "default-src 'self' http://192.168.31.164:3000; img-src 'self' http://192.168.31.164:9000 data: blob:; connect-src 'self' ipc: http://192.168.31.164:8080; script-src 'self'; style-src 'self' 'unsafe-inline';"
-}
 
-  },
-  "plugins": {
-    "http": {
-      "enabled": true
+    "security": {
+
+      "csp": "default-src 'self' app: https://10.205.157.61:9000; img-src 'self' app: https://10.205.157.61:9000 data: blob:; connect-src 'self' app: https://10.205.157.61:9000 https://10.205.157.61:8080 ipc:; script-src 'self' app:; style-src 'self' 'unsafe-inline' app:;"
     }
   },
+
+  "plugins": {
+    "http": {
+      "enabled": true,
+      "permissions": {
+        "default": true,
+        "allow": [
+          "https://10.205.157.61:9000",
+          "https://10.205.157.61:8080"
+        ]
+      }
+    }
+  },
+
   "bundle": {
     "active": true,
     "targets": "all",

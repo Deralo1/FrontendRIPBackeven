@@ -8,16 +8,18 @@ import { useEffect } from "react";
 import { dest_root } from "./target_config";
 
 function App() {
-    useEffect(()=>{
-    invoke('tauri', {cmd:'create'})
-      .then(() =>{console.log("Tauri launched")})
-      .catch(() =>{console.log("Tauri not launched")})
-    return () =>{
-      invoke('tauri', {cmd:'close'})
-        .then(() =>{console.log("Tauri launched")})
-        .catch(() =>{console.log("Tauri not launched")})
-    }
-  }, [])
+useEffect(() => {
+  invoke("create")
+    .then(() => console.log("Tauri launched"))
+    .catch(() => console.log("Tauri not launched"));
+
+  return () => {
+    invoke("close")
+      .then(() => console.log("Tauri closed"))
+      .catch(() => console.log("Tauri not closed"));
+  };
+}, []);
+
 
   return (
     <BrowserRouter basename={dest_root}>

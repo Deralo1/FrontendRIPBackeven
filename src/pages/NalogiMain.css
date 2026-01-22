@@ -411,10 +411,7 @@ h2 {
     min-width: 200px;
     flex: 1;
   }
-  
-  .filters-row {
-    display: none;
-  }
+
   
   .card-img {
     height: 240px;
