@@ -1,5 +1,6 @@
 import arendaImg from "../assets/arenda.jpg";
 import okladImg from "../assets/oklad.jpg";
+import siryeImg from "../assets/siriy.jpg";
 
 export const expensesMock = [
   {
@@ -19,5 +20,14 @@ export const expensesMock = [
     ImageURL: okladImg,
     Description:
       "Оклад — фиксированная часть заработной платы, которая выплачивается сотруднику независимо от объёма выполненной работы. В среднем по отрасли он составляет около 168 000 ₽. Конкретная сумма зависит от должности, региона и уровня квалификации.",
+  },
+  {
+    ExpenseID: 3,
+    Title: "Сырьё",
+    ShortDescription: "Стоимость сырья для производства 1кг продукции",
+    Price: 500,
+    ImageURL: siryeImg,
+    Description:
+      "Сырьё — это материалы, используемые для производства продукции. Цена зависит от вида: металл, древесина, пластик, текстиль и т.д. На стоимость влияют мировые котировки, логистика и объём закупки.",
   },
 ];
