@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import App from './App.tsx'
 import { registerSW } from 'virtual:pwa-register'
 import { Provider } from "react-redux"
-import store from "./store.ts"
+import store from "./store/store.ts"
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

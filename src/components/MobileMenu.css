@@ -76,10 +76,43 @@
   text-decoration: none;
   border-bottom: 1px solid #e6eef8;
   transition: background 0.2s ease;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
 }
 
 .mobile-nav-link:hover {
   background: #f4f7fc;
+}
+
+.mobile-username {
+  display: block;
+  padding: 16px 12px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #333;
+  border-bottom: 1px solid #e6eef8;
+}
+
+.logout-mobile-btn {
+  background-color: #667eea !important;
+  color: white !important;
+  border-radius: 4px;
+}
+
+.logout-mobile-btn:hover {
+  background-color: #764ba2 !important;
+}
+
+.login-mobile-btn {
+  background-color: #667eea !important;
+  color: white !important;
+  border-radius: 4px;
+}
+
+.login-mobile-btn:hover {
+  background-color: #764ba2 !important;
 }
 
 /* ===== RESPONSIVE MEDIA QUERY ===== */

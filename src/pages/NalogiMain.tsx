@@ -1,125 +1,122 @@
 import "./NalogiMain.css";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import { Spinner } from "react-bootstrap";
 import { BreadCrumbs } from "../components/BreadCrumbs";
-// import { ROUTES, ROUTE_LABELS } from "../../Routes";
 import DefaultImage from "../assets/DefaultImage.png";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link, useNavigate } from "react-router-dom";
 import { TopBar } from "../components/TopBar";
-import { expensesMock } from "../modules/expensesMock";
-import { Link } from "react-router-dom";
+import emptyCartMock from "../assets/korzinaempty.png";
+import { dest_img } from "../target_config";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "../store/store";
+
+import { getCalcinf } from "../store/getCalcinf";
 import {
   useSearch,
   useMinPrice,
   useMaxPrice,
   setSearchAction,
   setMinPriceAction,
-  setMaxPriceAction,
+  setMaxPriceAction
 } from "../slices/filtersSlice";
-import { useDispatch } from "react-redux";
-import emptyCartMock from "../assets/korzinaempty.png";
-import { dest_img } from "../target_config";
-import { dest_api } from "../target_config";
 
-// Тип услуги
-interface Service {
-  ExpenseID: number;
-  Title: string;
-  ShortDescription: string;
-  Price: number;
-  ImageURL: string;
-  isMock?: boolean;
-}
+import { loadExpenses } from "../api/expensesApi";
+import { useServices, useServicesLoading } from "../slices/expensesSlice";
+
+// 🔥 импорт добавления услуги в корзину
+import { addExpenseToCalc } from "../api/expensesApi";
 
 const NalogiMain: FC = () => {
-  const [services, setServices] = useState<Service[]>([]);
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+
+  const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
+  const app_id = useSelector((state: RootState) => state.Calcinf.app_id);
+  const count = useSelector((state: RootState) => state.Calcinf.count ?? 0);
+
+  // Логирование для отладки
+  useEffect(() => {
+    console.log('🔍 Store state:', { isAuthenticated, app_id, count });
+  }, [isAuthenticated, app_id, count]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      console.log('📊 Загружаем данные корзины для авторизованного пользователя');
+      dispatch(getCalcinf());
+    }
+  }, [isAuthenticated, dispatch]);
 
   const [searchParams] = useSearchParams();
   const query = searchParams.get("BreakenevSearch") || "";
-
-  const dispatch = useDispatch();
 
   const search = useSearch();
   const minPrice = useMinPrice();
   const maxPrice = useMaxPrice();
 
+  const services = useServices();
+  const loading = useServicesLoading();
+
+// Загружаем услуги после выхода из системы
 useEffect(() => {
-  const loadExpenses = async () => {
-    setLoading(true);
+  if (!isAuthenticated) {
+    loadExpenses(dispatch, "");
+  }
+}, [isAuthenticated, dispatch]);
 
-    const url =
-      query.trim().length > 0
-        ? `${dest_api}/api/v1/expenses?searchbyexpensename=${encodeURIComponent(query)}`
-        : `${dest_api}/api/v1/expenses`;
 
-    try {
-      const res = await fetch(url);
+// 2. Загружаем услуги при изменении поисковой строки
+useEffect(() => {
+  const effectiveSearch = query.trim().length > 0 ? query : search;
+  loadExpenses(dispatch, effectiveSearch);
+}, [query, search, dispatch]);
 
-      if (!res.ok) {
-        throw new Error("Backend unavailable");
-      }
 
-      const data = await res.json();
+  // Фильтрация по поиску и цене
+  const filteredServices = services.filter((s) => {
+    const normalizedSearch = search.trim().toLowerCase();
 
-      const filtered = data.data.filter((s: Service) => {
-        const min = minPrice === "" ? null : Number(minPrice);
-        const max = maxPrice === "" ? null : Number(maxPrice);
+    const matchesSearch =
+      normalizedSearch.length === 0 ||
+      s.Title.toLowerCase().includes(normalizedSearch);
 
-        const okMin = min === null || s.Price >= min;
-        const okMax = max === null || s.Price <= max;
+    const min = minPrice === "" ? null : Number(minPrice);
+    const max = maxPrice === "" ? null : Number(maxPrice);
 
-        return okMin && okMax;
-      });
+    const matchesMin = min === null || s.Price >= min;
+    const matchesMax = max === null || s.Price <= max;
 
-      setServices(filtered);
-    } catch (err) {
-      console.warn("Бэк недоступен — использую mock");
-
-      const normalizedQuery = query.trim().toLowerCase();
-
-      const filtered = expensesMock
-        .filter((s: Service) =>
-          normalizedQuery
-            ? s.Title.toLowerCase().includes(normalizedQuery)
-            : true,
-        )
-        .filter((s: Service) => {
-          const min = minPrice === "" ? null : Number(minPrice);
-          const max = maxPrice === "" ? null : Number(maxPrice);
-
-          const okMin = min === null || s.Price >= min;
-          const okMax = max === null || s.Price <= max;
-
-          return okMin && okMax;
-        });
-
-      setServices(filtered);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  loadExpenses();
-}, [query, minPrice, maxPrice]);
+    return matchesSearch && matchesMin && matchesMax;
+  });
 
   function toProxyUrl(url?: string, isMock?: boolean) {
     if (!url) return "";
-    // Если это мок изображение, то это уже валидный путь (из assets)
-    if (isMock) {
-      return url;
-    }
-    // Иначе преобразуем URL с бэкенда
-    return dest_img + url.replace("http://192.168.31.164:9000", "").replace("http://localhost:9000", "");
+    if (isMock) return url;
+    return dest_img + url
+      .replace("https://192.168.31.164:9000", "")
+      .replace("https://10.205.157.61:9000", "");
   }
+
+  // 🔥 обработчик добавления услуги в корзину
+const handleAdd = async (expenseId: number) => {
+  if (!isAuthenticated) return;
+
+  console.log('Добавляем услугу:', expenseId);
+  await addExpenseToCalc(expenseId);   // просто вызов API
+  console.log('API вызов завершен, обновляем корзину');
+  await dispatch(getCalcinf());        // обновляем количество в корзине
+  console.log('Корзина обновлена');
+};
+
 
   return (
     <div className="page-root">
       <TopBar />
+
       <main className="content">
         <div className="cards-area">
+          {/* Поиск */}
           <div className="search-row">
-            <form className="search-form">
+            <form className="search-form" onSubmit={(e) => e.preventDefault()}>
               <input
                 className="search-input"
                 type="text"
@@ -128,11 +125,17 @@ useEffect(() => {
                 onChange={(e) => dispatch(setSearchAction(e.target.value))}
               />
 
-              <button className="search-button" type="submit">
+              <button
+                className="search-button"
+                type="button"
+                onClick={() => loadExpenses(dispatch, search)}
+              >
                 Найти
               </button>
             </form>
           </div>
+
+          {/* Фильтры */}
           <div className="filters-row">
             <div className="price-filter">
               <input
@@ -144,8 +147,8 @@ useEffect(() => {
                 onChange={(e) =>
                   dispatch(
                     setMinPriceAction(
-                      e.target.value === "" ? "" : Number(e.target.value),
-                    ),
+                      e.target.value === "" ? "" : Number(e.target.value)
+                    )
                   )
                 }
               />
@@ -161,8 +164,8 @@ useEffect(() => {
                 onChange={(e) =>
                   dispatch(
                     setMaxPriceAction(
-                      e.target.value === "" ? "" : Number(e.target.value),
-                    ),
+                      e.target.value === "" ? "" : Number(e.target.value)
+                    )
                   )
                 }
               />
@@ -170,55 +173,52 @@ useEffect(() => {
           </div>
 
           <div className="breadcrumbs-wrap">
-            {" "}
-            <BreadCrumbs crumbs={[{ label: "Услуги" }]} />{" "}
+            <BreadCrumbs crumbs={[{ label: "Услуги" }]} />
           </div>
+
+          {/* Контент */}
           {loading ? (
             <div className="album_page_loader_block">
               <Spinner animation="border" />
             </div>
           ) : (
             <section className="cards-grid">
-              {services.length > 0 ? (
-                services.map((s) => (
+              {filteredServices.length > 0 ? (
+                filteredServices.map((s) => (
                   <div className="card" key={s.ExpenseID}>
                     <div
                       className="card-img"
                       style={{
-                        backgroundImage: `url('${toProxyUrl(s.ImageURL, s.isMock) || DefaultImage}')`,
+                        backgroundImage: `url('${toProxyUrl(
+                          s.ImageURL,
+                          s.isMock
+                        ) || DefaultImage}')`
                       }}
                     ></div>
 
                     <div className="card-body">
                       <h3 className="card-title">{s.Title}</h3>
                       <p className="card-sub">{s.ShortDescription}</p>
-
                       <p className="card-price">Цена: {s.Price} ₽</p>
 
                       <div className="card-controls">
-                        <form
-                          action="/breakevencalc/add-expense"
-                          method="POST"
-                          className="inline-form"
-                        >
-                          <input
-                            type="hidden"
-                            name="ExpenseID"
-                            value={s.ExpenseID}
-                          />
-                          <input
-                            type="hidden"
-                            name="BreakevenRequestID"
-                            value={1}
-                          />
-                        </form>
-
+                        {/* Подробнее */}
                         <Link
                           className="btn-details"
                           to={`/Nalogimain/${s.ExpenseID}`}
                         >
                           Подробнее
                         </Link>
+
+                        {/* 🔥 Добавить */}
+                        {isAuthenticated && (
+                          <button
+                            className="btn-details"
+                            onClick={() => handleAdd(s.ExpenseID)}
+                          >
+                            Добавить
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -231,15 +231,33 @@ useEffect(() => {
         </div>
       </main>
 
-      <a className="calculator disabled">
-        <img
-          src={dest_img + "/lab1/korzinaempty.png"}
-          alt="calculator-empty"
-          onError={(e) => {
-            e.currentTarget.src = emptyCartMock;
-          }}
-        />
-      </a>
+      {/* Кнопка корзины */}
+<a
+  className={`calculator ${!isAuthenticated || count === 0 ? "disabled" : ""}`}
+  onClick={() => {
+    if (isAuthenticated && count > 0 && app_id) {
+      navigate(`/BreakevenCalc/${app_id}`);
+    }
+  }}
+>
+<img
+  src={
+    !isAuthenticated || count === 0
+      ? emptyCartMock
+      : dest_img + "/lab1/korzinafull.png"
+  }
+  alt="cart"
+  onError={(e) => {
+    e.currentTarget.src = emptyCartMock;
+  }}
+/>
+
+
+  {isAuthenticated && count > 0 && (
+    <span className="calc-badge">{count}</span>
+  )}
+</a>
+
     </div>
   );
 };

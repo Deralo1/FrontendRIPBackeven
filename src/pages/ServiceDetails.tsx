@@ -28,7 +28,7 @@ export const ServiceDetails: FC = () => {
     console.log("Render ServiceDetails");
     const loadDetails = async () => {
       try {
-const res = await fetch(`${dest_api}/api/v1/expenses/${id}`);
+const res = await fetch(`${dest_api}/expenses/${id}`);
         if (!res.ok) {
           throw new Error("Backend unavailable");
         }
@@ -56,8 +56,8 @@ const res = await fetch(`${dest_api}/api/v1/expenses/${id}`);
     return (
       dest_img +
       url
-        .replace("http://192.168.31.164:9000", "")
-        .replace("http://localhost:9000", "")
+        .replace("https://192.168.31.164:9000", "")
+        .replace("https://10.205.157.61:9000", "")
     );
   }
 
@@ -73,12 +73,17 @@ const res = await fetch(`${dest_api}/api/v1/expenses/${id}`);
       <main className="details-layout">
         {/* Слева — видео */}
         <div className="details-video-wrap">
-<img
+<video
   className="details-video"
-  src="/DefaultVideo.gif"
-  alt="Animation"
+  src="/FrontendRIPBackeven/DefaultVideo.mp4"
+  autoPlay
+  loop
+  muted
+  playsInline
   draggable={false}
-/>
+>
+</video>
+
 
         </div>
 

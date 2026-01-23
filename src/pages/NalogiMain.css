@@ -285,9 +285,9 @@ body {
   position: fixed;
   right: 28px;
   bottom: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   width: 80px;
   height: 80px;
   background: #fff;
@@ -296,6 +296,15 @@ body {
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
+.calculator img {
+  width: 60%;
+  height: 60%;
+  object-fit: contain !important;
+  display: block;
+}
+
+
 
 .calculator:hover:not(.disabled) {
   transform: scale(1.1);
@@ -308,10 +317,6 @@ body {
   opacity: 0.6;
 }
 
-.calculator img {
-  width: 70px;
-  height: 70px;
-}
 
 .calc-badge {
   position: absolute;
@@ -631,3 +636,18 @@ h2 {
   }
 }
 
+
+
+.logout-btn:hover {
+  color: var(--accent);
+}
+.logout-btn {
+  all: unset !important;
+  display: inline-block !important;
+  cursor: pointer !important;
+  font-size: 18px !important;
+  font-weight: 500 !important;
+  color: #333 !important;
+  white-space: nowrap ;
+  transition: color 0.2s ease;
+}

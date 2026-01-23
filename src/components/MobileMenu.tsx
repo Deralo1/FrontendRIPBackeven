@@ -1,10 +1,16 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { ROUTES } from "../../Routes";
+import { RootState } from "../store/store";
+import { logoutUser } from "../api/userApi";
 import "./MobileMenu.css";
 
 const MobileMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch<any>();
+  const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
+  const username = useSelector((state: RootState) => state.user.profile?.username);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -12,6 +18,11 @@ const MobileMenu = () => {
 
   const closeMenu = () => {
     setIsOpen(false);
+  };
+
+  const handleLogout = async () => {
+    await logoutUser(dispatch);
+    closeMenu();
   };
 
   return (
@@ -46,6 +57,26 @@ const MobileMenu = () => {
         >
           Траты
         </Link>
+        
+        {isAuthenticated ? (
+          <>
+            <span className="mobile-username">{username}</span>
+            <button 
+              className="mobile-nav-link logout-mobile-btn"
+              onClick={handleLogout}
+            >
+              Выйти
+            </button>
+          </>
+        ) : (
+          <Link
+            to={ROUTES.LOGIN}
+            className="mobile-nav-link login-mobile-btn"
+            onClick={closeMenu}
+          >
+            Войти
+          </Link>
+        )}
       </nav>
     </>
   );

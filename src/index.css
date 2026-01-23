@@ -52,6 +52,63 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+/* Navigation Styles */
+.topbar-nav {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.nav-link {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 16px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.nav-link:hover {
+  background-color: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+}
+
+.auth-section {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.username {
+  color: #333;
+  font-weight: 500;
+  padding: 8px 12px;
+}
+
+.logout-btn {
+  background-color: #667eea;
+  color: white !important;
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+}
+
+.logout-btn:hover {
+  background-color: #764ba2;
+}
+
+.login-btn {
+  background-color: #667eea;
+  color: white !important;
+  padding: 8px 16px;
+  border-radius: 4px;
+}
+
+.login-btn:hover {
+  background-color: #764ba2;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
