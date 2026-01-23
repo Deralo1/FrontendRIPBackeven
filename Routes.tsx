@@ -15,5 +15,5 @@ export const ROUTE_LABELS: {[key in RouteKeyType]: string} = {
   PROFILE: "Профиль",
   REGISTER: "Регистрация",
   BreakevenCalc: "Калькулятор",
-HISTORY: "История"
+HISTORY: "История",
 };

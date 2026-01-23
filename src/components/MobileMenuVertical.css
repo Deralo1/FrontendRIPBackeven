@@ -1,4 +1,4 @@
-/* ===== MOBILE MENU BURGER VERTICAL ===== */
+/* ===== MOBILE MENU BURGER (VERTICAL) ===== */
 
 .mobile-menu-burger-vertical {
   display: none;
@@ -42,15 +42,16 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 260px; /* вертикальное меню уже, чем полноэкранное */
   height: 100%;
   background: #fff;
   flex-direction: column;
-  padding: 80px 24px 100px;
+  padding: 80px 20px 24px;
   gap: 16px;
   z-index: 999;
-  max-width: 100%;
   overflow-y: auto;
+  border-right: 1px solid #e6eef8;
+  box-shadow: 0 0 20px rgba(0,0,0,0.08);
 }
 
 .mobile-menu-vertical.open {
@@ -67,6 +68,8 @@
   z-index: 998;
 }
 
+/* ===== LINKS ===== */
+
 .mobile-nav-link-vertical {
   display: block;
   padding: 16px 12px;
@@ -76,13 +79,57 @@
   text-decoration: none;
   border-bottom: 1px solid #e6eef8;
   transition: background 0.2s ease;
+  cursor: pointer;
 }
 
 .mobile-nav-link-vertical:hover {
   background: #f4f7fc;
 }
 
-/* ===== RESPONSIVE MEDIA QUERY ===== */
+/* ===== USERNAME ===== */
+
+.mobile-username-vertical {
+  display: block;
+  padding: 16px 12px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #333;
+  border-bottom: 1px solid #e6eef8;
+}
+
+/* ===== BUTTONS ===== */
+
+.logout-mobile-btn-vertical {
+  background-color: #667eea !important;
+  color: white !important;
+  border-radius: 4px;
+  padding: 14px 12px;
+  font-size: 18px;
+  text-align: left;
+  border: none;
+  cursor: pointer;
+}
+
+.logout-mobile-btn-vertical:hover {
+  background-color: #764ba2 !important;
+}
+
+.login-mobile-btn-vertical {
+  background-color: #667eea !important;
+  color: white !important;
+  border-radius: 4px;
+  padding: 14px 12px;
+  font-size: 18px;
+  text-align: left;
+  border: none;
+  cursor: pointer;
+}
+
+.login-mobile-btn-vertical:hover {
+  background-color: #764ba2 !important;
+}
+
+/* ===== RESPONSIVE ===== */
 
 @media (max-width: 768px) {
   .mobile-menu-burger-vertical {

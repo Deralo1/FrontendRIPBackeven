@@ -18,17 +18,26 @@ interface ServiceDetail {
   Description: string;
   isMock?: boolean;
 }
+
+interface RecentService {
+  ExpenseID?: number;
+  Title?: string;
+  Price?: number;
+  ImageURL?: string;
+  isMock?: boolean;
+}
 import { dest_api } from "../target_config";
 
 export const ServiceDetails: FC = () => {
   const { id } = useParams();
   const [service, setService] = useState<ServiceDetail | null>(null);
+  const [recentServices, setRecentServices] = useState<RecentService[]>([]);
 
   useEffect(() => {
     console.log("Render ServiceDetails");
     const loadDetails = async () => {
       try {
-const res = await fetch(`${dest_api}/expenses/${id}`);
+        const res = await fetch(`${dest_api}/expenses/${id}`);
         if (!res.ok) {
           throw new Error("Backend unavailable");
         }
@@ -41,7 +50,23 @@ const res = await fetch(`${dest_api}/expenses/${id}`);
         );
       }
     };
+    
+    const loadRecentServices = async () => {
+      try {
+        const res = await fetch(`${dest_api}/expenses?recent=true`);
+        if (!res.ok) {
+          throw new Error("Backend unavailable");
+        }
+        const data = await res.json();
+        setRecentServices(Array.isArray(data.data) ? data.data : data.data || []);
+      } catch (err) {
+        console.warn("Не удалось загрузить недавно просмотренные", err);
+        setRecentServices([]);
+      }
+    };
+    
     loadDetails();
+    loadRecentServices();
   }, [id]);
 
   if (!service) return null;
@@ -111,6 +136,35 @@ const res = await fetch(`${dest_api}/expenses/${id}`);
 
             <p className="details-desc">{service.Description}</p>
           </div>
+
+          {/* Недавно просмотренные услуги */}
+          {recentServices.length > 0 && (
+            <div className="details-recent">
+              <h3 className="recent-title">Недавно просмотренные</h3>
+              <div className="recent-grid">
+                {recentServices.map((recent) => (
+                  <a
+                    key={recent.ExpenseID}
+                  
+                    className="recent-card"
+                  >
+                    <img
+                      src={toProxyUrl(recent.ImageURL, recent.isMock) || DefaultImage}
+                      alt={recent.Title}
+                      className="recent-image"
+                      onError={(e) => {
+                        e.currentTarget.src = DefaultImage;
+                      }}
+                    />
+                    <div className="recent-info">
+                      <p className="recent-service-title">{recent.Title}</p>
+                      <p className="recent-price">{recent.Price} ₽</p>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </main>
     </div>

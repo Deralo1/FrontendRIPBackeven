@@ -2,7 +2,6 @@ import axios from "axios";
 import {
   requestStart,
   loginSuccess,
-  loginFailure,
   logoutSuccess,
   profileLoaded,
   profileUpdated,

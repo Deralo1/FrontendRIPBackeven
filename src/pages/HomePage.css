@@ -11,16 +11,23 @@ body {
   background: var(--bg);
   min-height: 100vh;
 }
-.home-content {
-  padding: 36px 0;
-  margin-top: 12px; /* расстояние между топбаром и текстом */
-}
-
 
 .home-root {
   max-width: 1770px;
   margin: 0 auto;
   padding: 24px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+  text-align: center;
+}
+
+.home-content {
+  padding: 0;
+  margin: 0;
 }
 
 .home-title {
@@ -34,7 +41,7 @@ body {
   color: #405965;
   line-height: 1.6;
   max-width: 900px;
-  margin-bottom: 28px;
+  margin: 0 auto 28px;
 }
 
 .home-button {

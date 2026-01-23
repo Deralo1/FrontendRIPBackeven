@@ -26,7 +26,7 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: 40px;
   margin-top: 48px;
-  align-items: start;
+
 }
 
 /* Видео слева */
@@ -47,11 +47,25 @@ body {
 }
 
 /* Правая колонка — картинка и текст */
+.details-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-top: 48px;
+  align-items: stretch;
+}
+
 .details-right {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  height: 100%;
 }
+
+.details-recent {
+  margin-top: auto;
+}
+
 
 /* Картинка - показывается только на больших/средних экранах */
 .details-image-wrap {
@@ -75,7 +89,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-width: 320px;
+  max-width: 700px;
 }
 
 /* Название */
@@ -247,5 +261,87 @@ body {
   .details-short,
   .details-desc {
     font-size: 12px;
+  }
+}
+
+/* Недавно просмотренные услуги */
+
+
+.recent-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.recent-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 15px;
+}
+
+.recent-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-decoration: none;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  background: white;
+  border: 1px solid #e8e8e8;
+}
+
+.recent-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.recent-image {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  display: block;
+}
+
+.recent-info {
+  padding: 0 10px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.recent-service-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  margin: 0;
+}
+
+.recent-price {
+  font-size: 12px;
+  color: #f15922;
+  font-weight: 600;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .recent-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+  }
+
+  .recent-image {
+    height: 120px;
+  }
+
+  .recent-title {
+    font-size: 16px;
   }
 }

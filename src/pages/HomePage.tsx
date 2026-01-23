@@ -1,13 +1,13 @@
 import type { FC } from "react";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../Routes";
-import { TopBar } from "../components/TopBar";
+
 import "./HomePage.css";
 
 export const HomePage: FC = () => {
   return (
     <div className="home-root">
-      <TopBar />
+      
 
       <div className="home-content">
         <h1 className="home-title">Расчёт точки безубыточности</h1>

@@ -34,6 +34,8 @@ const ProfilePage: React.FC = () => {
 
   // Заполняем форму данными профиля
   useEffect(() => {
+    console.log("PROFILE:", profile);
+
     if (profile) {
       setFormData({
         login: profile?.Login || '',
@@ -162,8 +164,8 @@ const ProfilePage: React.FC = () => {
 function getRoleName(role: string): string {
   const roles: { [key: string]: string } = {
     guest: 'Гость',
-    creator: 'Создатель',
-    moderator: 'Модератор',
+    creator: 'Аналитик',
+    moderator: 'Финансовый директор',
   };
   return roles[role] || role;
 }

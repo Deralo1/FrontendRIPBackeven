@@ -5,7 +5,7 @@ import expensesReducer from "../slices/expensesSlice";
 import userReducer, { logoutSuccess } from "../slices/usersSlice";
 import CalcinfReducer from "../slices/CalcinfSlice";
 import breakevenDetailReducer from "../slices/breakevenDetailSlice";
-import breakevenReducer from "../slices/breakevenSlice"
+import breakevenReducer from "../slices/breakEvenDraftSlice";
 // --- 1. Комбинируем все редьюсеры ---
 const appReducer = combineReducers({
   filters: filtersReducer,

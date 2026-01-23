@@ -1,22 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { api } from "../api/index";
+import { DsBreakevenRequestDTO } from "../api/Api";
 //import { RootState } from "../store/store";
 
-// -----------------------------
-// Типы из swagger
-// -----------------------------
-interface BreakevenRequest {
-  BreakevenRequestID?: number;
-  BreakevenRequestStatus?: string;
-  AmountProduct?: number;
-  CalcAnswer?: number;
-  CreationDate?: string;
-  FormatedAt?: string;
-  CompletedAt?: string;
-  CreatorLogin?: string;
-  ModeratorLogin?: string;
-  RequestExpense?: any[];
-}
+// ===== Используем типы напрямую из API =====
+type BreakevenRequest = DsBreakevenRequestDTO;
 
 interface BreakevenState {
   list: BreakevenRequest[];       // список заявок
@@ -45,6 +33,10 @@ export const fetchBreakevenList = createAsyncThunk(
   "breakeven/list",
   async (status?: string) => {
     const response = await api.breakeven.breakevenList({ status });
+    // API может вернуть {data: [...]} или просто [...]
+    if (response.data && typeof response.data === 'object' && 'data' in response.data) {
+      return (response.data as any).data;
+    }
     return response.data;
   }
 );
@@ -130,9 +122,16 @@ const breakevenSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // LIST
+      .addCase(fetchBreakevenList.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(fetchBreakevenList.fulfilled, (state, action) => {
+        state.loading = false;
         state.list = action.payload;
+      })
+      .addCase(fetchBreakevenList.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Ошибка";
       })
 
       // CALC INFO
